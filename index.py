@@ -14,7 +14,7 @@ class Pizzas:
 class Toppings:
     def __init__(self, topping, amount):
         self.__topping = topping
-        self.__amount = amount
+        self.__amount = float(amount)
 
     def getTopping(self):
         return self.__topping
@@ -28,16 +28,16 @@ class Toppings:
         toppingCost = 0.0
     
         if(self.__topping == "Pepperoni"):
-            tempCost = baseCost*float(self.__amount)
+            tempCost = baseCost*self.__amount
             toppingCost = tempCost
         if(self.__topping == "Cheese"):
-            tempCost = (baseCost+25)*float(self.__amount)
+            tempCost = (baseCost+25)*self.__amount
             toppingCost = toppingCost+tempCost
         if(self.__topping == "Jalepenos"):
-            tempCost = (baseCost+25)*float(self.__amount)
+            tempCost = (baseCost+25)*self.__amount
             toppingCost = toppingCost+tempCost
         if(self.__topping == "Sausages"):
-            tempCost = (baseCost+40)*float(self.__amount)
+            tempCost = (baseCost+40)*self.__amount
             toppingCost = toppingCost+tempCost
         
         return round(toppingCost/100, 2)
@@ -45,7 +45,7 @@ class Toppings:
 class Sides:
     def __init__(self, side, amount):
         self.__side = side
-        self.__amount = amount
+        self.__amount = float(amount)
 
     def getSide(self):
         return self.__side
@@ -57,6 +57,8 @@ class Sides:
         baseCost = 100.0
         tempCost = 0
         totalCost = 0
+
+
 
 class Prices(Pizzas, Toppings):
     def __init__(self,  price):
@@ -101,7 +103,8 @@ amounts = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]
 sg.set_options(font=("Comic Sans", 16))
 sg.theme('System Default 1')
 
-layout = [ [sg.Text("Your Way Pizza Parlour Order Menu", font=("Comic Sans", 20))],
+layout = [
+          [sg.Text("Your Way Pizza Parlour Order Menu", font=("Comic Sans", 20))],
           [sg.Text("What type of Pizza would you like?"), sg.Combo(pizzaList, default_value="Pepperoni", key="Type")],
           [sg.Text("What size Pizza would you like?"), sg.Combo(sizeList, default_value="Medium", key="Size")],
           [sg.Text("Any Extra Toppings?")],
@@ -115,11 +118,51 @@ layout = [ [sg.Text("Your Way Pizza Parlour Order Menu", font=("Comic Sans", 20)
           [sg.Spin(amounts, key="pot", readonly=True, size=3), sg.Text("Potato Wedges")],
           [sg.Spin(amounts, key="coo", readonly=True, size=3), sg.Text("Cookies")],
           [sg.Button("OK"), sg.Button("Cancel")],
-          [sg.Text("")],
-          [sg.Text("£0.00", key="finalPrice")]
         ]
 
 window = sg.Window("Your Way Pizza Parlour", layout)
+
+def orderBillWindow():
+    billCol1 = [
+        [sg.Text("Test")]
+    ]
+    billCol2 = [
+        [sg.Text("Test")]
+    ]
+
+    billCol3 = [
+        [sg.Text("Test")]
+    ]
+    billCol4 = [
+        [sg.Text("Test")]
+    ]
+    
+    billCol5 = [
+        [sg.Text("Test")]
+    ]
+    billCol6 = [
+        [sg.Text("Test")]
+    ]
+
+    layout = [
+        [sg.Text(f"Your total is: £", justification="centre", font=("Comic Sans", 20, "bold"))],
+        [sg.Text("Pizza and Size", justification="centre", font=("Comic Sons", 16, "underline"))],
+        [sg.Column(billCol1), sg.Column(billCol2)],
+        [sg.Text("Extra Toppings", justification="centre", font=("Comic Sons", 16, "underline"))],
+        [sg.Column(billCol3), sg.Column(billCol4)],
+        [sg.Text("Side Orders", justification="centre", font=("Comic Sons", 16, "underline"))],
+        [sg.Column(billCol5), sg.Column(billCol6)],
+        [sg.Button("OK")]
+    ]
+
+    window = sg.Window("Order Bill", layout)
+
+    while True:
+        event, values = window.read()
+
+        if event == "OK" or event == sg.WIN_CLOSED:
+            break
+    window.close()
 
 while True:
     event, values = window.read()
@@ -135,9 +178,9 @@ while True:
         totalPrice = totalPrice+tempPrice
 
     price = Pizzas(values["Type"], values["Size"])
-
+    finalPrice = Prices.getPrice(price)+totalPrice
     if event == "OK":
-        window['finalPrice'].update(f"Your total is: £{Prices.getPrice(price)+totalPrice}")
+        orderBillWindow()
 
     print(f'You ordered a {values["Size"]} {values["Type"]} pizza\nThis will cost {Prices.getPrice(price)+totalPrice}')
 
