@@ -133,7 +133,7 @@ layout = [
           [sg.Spin(amounts, key="col", readonly=True, size=3), sg.Text("Coleslaw")],
           [sg.Spin(amounts, key="pot", readonly=True, size=3), sg.Text("Potato Wedges")],
           [sg.Spin(amounts, key="coo", readonly=True, size=3), sg.Text("Cookies")],
-          [sg.Button("OK"), sg.Push(), sg.Button("Close")],
+          [sg.Button("Submit"), sg.Push(), sg.Button("Close")],
         ]
 
 window = sg.Window("Your Way Pizza Parlour", layout)
@@ -241,7 +241,7 @@ while True:
 
     price = Pizzas(values["Type"], values["Size"], values["pizzaAmount"])
     finalPrice = (Prices.getPrice(price)+totalPrice)/100
-    if event == "OK":
+    if event == "Submit":
         orderBillWindow(finalPrice, toppingsAmounts, sidesAmounts, price)
 
     print(f'You ordered a {values["Size"]} {values["Type"]} pizza\nThis will cost {Prices.getPrice(price)+totalPrice}')
