@@ -111,7 +111,7 @@ class Prices(Pizzas, Toppings, Sides):
 
         return finalPrice
 
-pizzaList = ["Pepperoni", "Only Cheese", "Spicy", "Vegetarian"]
+pizzaList = ["Pepperoni", "Only Cheese", "Spicy", "Meaty", "Vegetarian"]
 sizeList = ["Small", "Medium", "Large", "Extra Large"]
 amounts = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]
 
