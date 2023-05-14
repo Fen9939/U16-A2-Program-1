@@ -81,6 +81,7 @@ class Prices(Pizzas, Toppings, Sides):
     def __init__(self,  price):
         super(Pizzas).__init__
         super(Toppings).__init__
+        super(Sides).__init__
         self.__price = price    
 
     def getPrice(self):
