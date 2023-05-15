@@ -1,0 +1,255 @@
+IMPORT GUI
+
+CLASS Pizzas:
+    FUNCTION getType(self):
+        RETURN type
+
+    FUNCTION getSize(self):
+        RETURN size
+
+    FUNCTION getAmount(self):
+        RETURN amount
+
+CLASS Toppings:
+    FUNCTION getTopping(self):
+        RETURN topping
+
+    FUNCTION getAmount(self):
+        RETURN amount
+
+    FUNCTION toppCost(self):
+        SET baseCost TO 100.0
+        SET tempCost TO 0.0
+        SET toppingCost TO 0.0
+
+        if(topping EQUALS "Pepperoni"):
+            SET tempCost TO baseCost*amount
+            SET toppingCost TO tempCost
+
+        if(topping EQUALS "Cheese"):
+            SET tempCost TO (baseCost+25)*amount
+            SET toppingCost TO toppingCost+tempCost
+
+        if(topping EQUALS "Jalepenos"):
+            SET tempCost TO (baseCost+25)*amount
+            SET toppingCost TO toppingCost+tempCost
+
+        if(topping EQUALS "Sausages"):
+            SET tempCost TO (baseCost+40)*amount
+            SET toppingCost TO toppingCost+tempCost
+
+        RETURN toppingCost
+
+CLASS Sides:
+    FUNCTION getSide(self):
+        RETURN side
+
+    FUNCTION getAmount(self):
+        RETURN amount
+
+    FUNCTION sidesCost(self):
+        SET baseCost TO 100.0
+        SET tempCost TO 0
+        SET totalCost TO 0
+
+        if(side EQUALS "Garlic Herb Dip"):
+            SET tempCost TO baseCost*amount
+            SET totalCost TO tempCost
+
+        if(side EQUALS "Coleslaw"):
+            SET tempCost TO (baseCost+15)*amount
+            SET totalCost TO totalCost+tempCost
+
+        if(side EQUALS "Potato Wedges"):
+            SET tempCost TO (baseCost+25)*amount
+            SET totalCost TO totalCost+tempCost
+
+        if(side EQUALS "Cookies"):
+            SET tempCost TO (baseCost+25)*amount
+            SET totalCost TO totalCost+tempCost
+
+        RETURN totalCost
+
+CLASS Prices(Pizzas, Toppings, Sides):
+
+    FUNCTION getPrice(self):
+        SET Small TO 0.75
+        SET Medium TO 1.00
+        SET Large TO 2.00
+        SET XL TO 2.75
+        SET basePrice TO 800
+        SET finalPrice TO 0
+
+        IF getType() EQUALS "Only Cheese":
+            SET basePrice TO basePrice+29
+
+        IF getType() EQUALS "Spicy":
+            SET basePrice TO basePrice+79
+
+        IF getType() EQUALS "Meaty":
+            SET basePrice TO basePrice+129
+
+        IF getType() EQUALS "Vegetarian":
+            SET basePrice TO basePrice+259
+
+        IF getSize() EQUALS "Small":
+            SET finalPrice TO basePrice*Small
+
+        IF getSize() EQUALS "Medium":
+            SET finalPrice TO basePrice*Medium
+
+        IF getSize() EQUALS "Large":
+            SET finalPrice TO basePrice*Large
+
+        IF getSize() EQUALS "Extra Large":
+            SET finalPrice TO basePrice*XL
+
+        RETURN finalPrice
+
+SET pizzaTypes TO ["Pepperoni", "Only Cheese", "Spicy", "Meaty", "Vegetarian"]
+SET pizzaSizes TO ["Small", "Medium", "Large", "Extra Large"]
+SET amounts TO ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]
+
+SET layout TO [
+          [GUI.Text("Your Way Pizza Parlour Order Menu", font=("Comic Sans", 20))],
+          [GUI.Text("What type of Pizza would you like?"), GUI.Combo(pizzaList, default_value="Pepperoni", key="Type")],
+          [GUI.Text("What size Pizza would you like?"), GUI.Combo(sizeList, default_value="Medium", key="Size")],
+          [GUI.Text("How many Pizzas would you like?"), GUI.Spin(amounts, initial_value=1, key="pizzaAmount")],
+          [GUI.Text("Any Extra Toppings?")],
+          [GUI.Spin(amounts, key="pep", readonly=True, size=3), GUI.Text("Pepperoni")],
+          [GUI.Spin(amounts, key="che", readonly=True, size=3), GUI.Text("Cheese")],
+          [GUI.Spin(amounts, key="jal", readonly=True, size=3), GUI.Text("Jalepenos")],
+          [GUI.Spin(amounts, key="sau", readonly=True, size=3), GUI.Text("Sausages")],
+          [GUI.Text("Any Side Orders?")],
+          [GUI.Spin(amounts, key="ghd", readonly=True, size=3), GUI.Text("Garlic Herb Dip")],
+          [GUI.Spin(amounts, key="col", readonly=True, size=3), GUI.Text("Coleslaw")],
+          [GUI.Spin(amounts, key="pot", readonly=True, size=3), GUI.Text("Potato Wedges")],
+          [GUI.Spin(amounts, key="coo", readonly=True, size=3), GUI.Text("Cookies")],
+          [GUI.Button("Submit"), GUI.Push(), GUI.Button("Close")],
+        ]
+
+FUNCTION orderBillWindow(price, toppings, sides, pizzas):
+
+    SET billCol1 TO [
+        [GUI.Text("Price FOR One")]
+    ]
+
+    SET billCol2 TO [
+        [GUI.Text("Name")],
+    ]
+
+    SET billCol3 TO [
+        [GUI.Text("Amount")]
+    ]
+
+    SET billCol4 TO [
+        [GUI.Text(f"£{Prices.getPrice(pizzas)/100}")]
+    ]
+
+    SET billCol5 TO [
+        [GUI.Text(f"{pizzas.getSize()} {pizzas.getType()}")]
+    ]
+
+    SET billCol6 TO [
+        [GUI.Text(pizzas.getAmount())]
+    ]
+
+    SET billCol7 TO [
+        [GUI.Text("£1.00")],
+        [GUI.Text("£1.25")],
+        [GUI.Text("£1.25")],
+        [GUI.Text("£1.40")]
+    ]
+
+    SET billCol8 TO [
+        [GUI.Text("Pepperoni")],
+        [GUI.Text("Cheese")],
+        [GUI.Text("Jalepenos")],
+        [GUI.Text("Sausages")]
+    ]
+
+    SET billCol9 TO [
+        [GUI.Text(toppings["Pepperoni"])],
+        [GUI.Text(toppings["Cheese"])],
+        [GUI.Text(toppings["Jalepenos"])],
+        [GUI.Text(toppings["Sausages"])]
+    ]
+
+    SET billCol10 TO [
+        [GUI.Text("£1.00")],
+        [GUI.Text("£1.15")],
+        [GUI.Text("£1.15")],
+        [GUI.Text("£1.25")]
+    ]
+
+    SET billCol11 TO [
+        [GUI.Text("Garlic Herb Dip")],
+        [GUI.Text("Coleslaw")],
+        [GUI.Text("Potato Wedges")],
+        [GUI.Text("Cookies")]
+    ]
+
+    SET billCol12 TO [
+        [GUI.Text(sides["Garlic Herb Dip"])],
+        [GUI.Text(sides["Coleslaw"])],
+        [GUI.Text(sides["Potato Wedges"])],
+        [GUI.Text(sides["Cookies"])]
+    ]
+
+    SET layout TO [
+
+        [GUI.Text(f"Your total is: £{price}")],
+
+        [GUI.Column(billCol1), GUI.Column(billCol2), GUI.Column(billCol3)],
+
+        [GUI.Text("Pizza and Size")],
+
+        [GUI.Column(billCol4), GUI.Column(billCol5), GUI.Column(billCol6)],
+
+        [GUI.Text("Extra Toppings")],
+
+        [GUI.Column(billCol7), GUI.Column(billCol8), GUI.Column(billCol9)],
+
+        [GUI.Text("Side Orders")],
+
+        [GUI.Column(billCol10), GUI.Column(billCol11), GUI.Column(billCol12)],
+
+        [GUI.Button("OK")]
+
+    ]
+
+    SET window TO GUI.Window("Order Bill", layout, element_justification="c",)
+
+    WHILE True:
+        SET event, values TO window.read()
+
+        IF event EQUALS "OK" or event EQUALS GUI.WIN_CLOSED:
+            GUI.popup("Your order has been sent to the kitchen!")
+
+            break
+
+WHILE True:
+    SET event, values TO window.read()
+
+    IF event EQUALS "Close" or event EQUALS GUI.WIN_CLOSED:
+        break
+
+    SET toppingsAmounts TO {"Pepperoni": values["pep"], "Cheese": values["che"], "Jalepenos": values["jal"], "Sausages": values["sau"]}
+    SET sidesAmounts TO {"Garlic Herb Dip": values["ghd"], "Coleslaw": values["col"], "Potato Wedges": values["pot"], "Cookies": values["coo"]}
+    SET totalPrice TO 0
+
+    FOR i IN toppingsAmounts:
+        SET tempPrice TO Prices.toppCost(Toppings(i, toppingsAmounts[i]))
+        SET totalPrice TO totalPrice+tempPrice
+
+    FOR i IN sidesAmounts:
+        SET tempPrice TO Prices.sidesCost(Sides(i, sidesAmounts[i]))
+        SET totalPrice TO totalPrice+tempPrice
+
+    SET price TO Pizzas(values["Type"], values["Size"], values["pizzaAmount"])
+    SET finalPrice TO (Prices.getPrice(price)+totalPrice)/100
+
+    IF event EQUALS "Submit":
+        orderBillWindow(finalPrice, toppingsAmounts, sidesAmounts, price)
+
+    OUTPUT(f'You ordered a {values["Size"]} {values["Type"]} pizza\nThis will cost {Prices.getPrice(price)+totalPrice}')

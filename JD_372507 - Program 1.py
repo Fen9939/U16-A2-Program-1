@@ -1,36 +1,48 @@
+# Imports the `PySimpleGUI` library, which allows for ease when creating GUIs
 import PySimpleGUI as sg
 
+# This defines the `Pizzas` class
 class Pizzas:
+    # This initialises the class
     def __init__(self, type, size, amount):
         self.__type = type
         self.__size = size
         self.__amount = amount
 
+    # This returns the type of pizza
     def getType(self):
         return self.__type
     
+    # This returns the size of pizza
     def getSize(self):
         return self.__size
     
+    # This returns the amount of pizza
     def getAmount(self):
         return self.__amount
 
+# This defines the `Toppings` class
 class Toppings:
+    # This initialises the class
     def __init__(self, topping, amount):
         self.__topping = topping
         self.__amount = float(amount)
 
+    # This returns the topping
     def getTopping(self):
         return self.__topping
     
+    # This returns the amount of toppings
     def getAmount(self):
         return self.__amount
     
+    # This calculates the cost of every selected topping
     def toppCost(self):
         baseCost = 100.0
         tempCost = 0.0
         toppingCost = 0.0
-    
+
+        # 
         if(self.__topping == "Pepperoni"):
             tempCost = baseCost*self.__amount
             toppingCost = tempCost
@@ -47,6 +59,7 @@ class Toppings:
         return toppingCost
 
 class Sides:
+    # This initialises the class
     def __init__(self, side, amount):
         self.__side = side
         self.__amount = float(amount)
@@ -78,6 +91,7 @@ class Sides:
         return totalCost
 
 class Prices(Pizzas, Toppings, Sides):
+    # This initialises the class
     def __init__(self,  price):
         super(Pizzas).__init__
         super(Toppings).__init__
