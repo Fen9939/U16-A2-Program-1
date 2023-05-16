@@ -42,7 +42,7 @@ class Toppings:
         tempCost = 0.0
         toppingCost = 0.0
 
-        # 
+        # This codeblock works out the overall cost of all the selected toppings
         if(self.__topping == "Pepperoni"):
             tempCost = baseCost*self.__amount
             toppingCost = tempCost
@@ -58,23 +58,28 @@ class Toppings:
         
         return toppingCost
 
+# This defines the 'Sides' class
 class Sides:
     # This initialises the class
     def __init__(self, side, amount):
         self.__side = side
         self.__amount = float(amount)
 
+    # This defines the 'getSide' function
     def getSide(self):
         return self.__side
     
+    # This defines the 'getAmount' function
     def getAmount(self):
         return self.__amount
     
+    # This defines the 'sidesCost' function
     def sidesCost(self):
         baseCost = 100.0
         tempCost = 0
         totalCost = 0
 
+        # This codeblock works out the overall cost of all selected side orders
         if(self.__side == "Garlic Herb Dip"):
             tempCost = baseCost*self.__amount
             totalCost = tempCost
@@ -90,6 +95,7 @@ class Sides:
 
         return totalCost
 
+# This defines the 'Prices' class
 class Prices(Pizzas, Toppings, Sides):
     # This initialises the class
     def __init__(self,  price):
@@ -98,6 +104,7 @@ class Prices(Pizzas, Toppings, Sides):
         super(Sides).__init__
         self.__price = price    
 
+    # This defines the 'getPrice()' function
     def getPrice(self):
         Small = 0.75
         Medium = 1.00
@@ -106,6 +113,7 @@ class Prices(Pizzas, Toppings, Sides):
         basePrice = 800
         finalPrice = 0
 
+        # This codeblock works out the overall cost of the chosen pizza(s)
         if self.getType() == "Only Cheese":
             basePrice = basePrice+29
         if self.getType() == "Spicy":
@@ -126,13 +134,18 @@ class Prices(Pizzas, Toppings, Sides):
 
         return finalPrice
 
+# This creates a list of all the avabilable pizzas
 pizzaList = ["Pepperoni", "Only Cheese", "Spicy", "Meaty", "Vegetarian"]
+# This creates a list of all the available sizes
 sizeList = ["Small", "Medium", "Large", "Extra Large"]
+# This creates a list containing 0-10
 amounts = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]
 
+# This sets the font and theme options for the GUI
 sg.set_options(font=("Comic Sans", 16))
 sg.theme('System Default 1')
 
+# This defines the layout of the ordering GUI
 layout = [
           [sg.Text("Your Way Pizza Parlour Order Menu", font=("Comic Sans", 20))],
           [sg.Text("What type of Pizza would you like?"), sg.Combo(pizzaList, default_value="Pepperoni", key="Type")],
@@ -151,8 +164,10 @@ layout = [
           [sg.Button("Submit"), sg.Push(), sg.Button("Close")],
         ]
 
+# This initialises the ordering GUI
 window = sg.Window("Your Way Pizza Parlour", layout)
 
+# This defines a function called 'orderBillWindow'
 def orderBillWindow(price, toppings, sides, pizzas):
     billCol1 = [
         [sg.Text("Price for One")]
@@ -212,7 +227,7 @@ def orderBillWindow(price, toppings, sides, pizzas):
         [sg.Text(sides["Cookies"])]
     ]
 
-
+    # This defines the layout of the bill GUI
     layout = [
         [sg.Text(f"Your total is: £{price}", font=("Comic Sans", 20, "bold"))],
         [sg.Column(billCol1), sg.Column(billCol2), sg.Column(billCol3)],
@@ -225,40 +240,54 @@ def orderBillWindow(price, toppings, sides, pizzas):
         [sg.Button("OK")]
     ]
 
+    # This initialises the bill GUI
     window = sg.Window("Order Bill", layout, element_justification="c",)
 
+    # This while true loop checks to see if the user presses any buttons
     while True:
         event, values = window.read()
 
+        # This if statement checks to see if the user closes the bill GUI or presses the 'OK' button
+        # and then makes a pop up show saying 'Your order has been sent to the kitchen!'
         if event == "OK" or event == sg.WIN_CLOSED:
             sg.popup("Your order has been sent to the kitchen!")
             break
 
+    # This line closes the bill GUI
     window.close()
 
+# This while true loop checks to see if the user presses any buttons
 while True:
     event, values = window.read()
 
+    # This if statement checks to see if the use closes the order GUI or presses the 'Close' button
     if event == "Close" or event == sg.WIN_CLOSED:
         break
 
+    # This defines a dictionary containing the extra toppings and amounts of them that the user wants
     toppingsAmounts = {"Pepperoni": values["pep"], "Cheese": values["che"], "Jalepenos": values["jal"], "Sausages": values["sau"]}
+    # This defines a dictionary containing the side orders and amounts of them that the user wants
     sidesAmounts = {"Garlic Herb Dip": values["ghd"], "Coleslaw": values["col"], "Potato Wedges": values["pot"], "Cookies": values["coo"]}
+    # This initialises a variable called 'totalPrice'
     totalPrice = 0
 
+    # This loops through the 'toppingsAmount' dictionary and works out the price of each topping
     for i in toppingsAmounts:
         tempPrice = Prices.toppCost(Toppings(i, toppingsAmounts[i]))
         totalPrice = totalPrice+tempPrice
 
+    # This loops through the 'sidesAmount' dictionary and works out the price of each side
     for i in sidesAmounts:
         tempPrice = Prices.sidesCost(Sides(i, sidesAmounts[i]))
         totalPrice = totalPrice+tempPrice
 
+    # This works out the price of the pizza based on the type, size, and the amount of them the customer wants
     price = Pizzas(values["Type"], values["Size"], values["pizzaAmount"])
+    # This line of code gets the price of everything added together
     finalPrice = (Prices.getPrice(price)+totalPrice)/100
+    # This if statement checks to see if the user presses the 'Submit' button, and then opens the bill GUI
     if event == "Submit":
         orderBillWindow(finalPrice, toppingsAmounts, sidesAmounts, price)
 
-    print(f'You ordered a {values["Size"]} {values["Type"]} pizza\nThis will cost {Prices.getPrice(price)+totalPrice}')
-
+# This closes the order GUI
 window.close()

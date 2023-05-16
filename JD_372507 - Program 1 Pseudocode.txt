@@ -116,7 +116,7 @@ FUNCTION orderBillWindow(price, toppings, sides, pizzas):
 
     set billLayout TO bill GUI
 
-    SET window TO GUI.Window(billLayout)
+    open the billLayout GUI
 
     WHILE True:
         SET event, values TO window.read()
@@ -153,5 +153,3 @@ WHILE True:
 
     IF user presses 'Submit':
         orderBillWindow(finalPrice, toppingsAmounts, sidesAmounts, price)
-
-    OUTPUT('You ordered a {pizzaSize} {pizzaType} pizza\nThis will cost {price}')
