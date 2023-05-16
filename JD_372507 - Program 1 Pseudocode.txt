@@ -132,8 +132,12 @@ WHILE True:
     IF user presses 'Close' or CLOSES the GUI:
         break
 
-    SET toppingsAmounts TO DICTIONARY{ "Pepperoni": values["pep"], "Cheese": values["che"], "Jalepenos": values["jal"], "Sausages": values["sau"] }
-    SET sidesAmounts TO DICTIONARY{ "Garlic Herb Dip": values["ghd"], "Coleslaw": values["col"], "Potato Wedges": values["pot"], "Cookies": values["coo"] }
+    SET toppingsAmounts TO DICTIONARY{ 
+        "Pepperoni": values["pep"], "Cheese": values["che"], "Jalepenos": values["jal"], "Sausages": values["sau"]
+         }
+    SET sidesAmounts TO DICTIONARY{ 
+        "Garlic Herb Dip": values["ghd"], "Coleslaw": values["col"], "Potato Wedges": values["pot"], "Cookies": values["coo"]
+         }
     SET totalPrice TO 0
 
     FOR every topping in toppingsAmount[]
